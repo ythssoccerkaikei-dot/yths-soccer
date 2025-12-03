@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>吉原工業サッカー部父母会 - 父母会費管理システム</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    window.lucideReact = window.lucide;
+  </script>
+  
+  <!-- Firebase App -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, doc, getDoc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyClIKuIG7rpDElq2nXTgpaYGNyYkuMXdjc",
+      authDomain: "yths-soccer-accounting.firebaseapp.com",
+      projectId: "yths-soccer-accounting",
+      storageBucket: "yths-soccer-accounting.firebasestorage.app",
+      messagingSenderId: "821933079252",
+      appId: "1:821933079252:web:009323e51b6b25d5bd9941"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    window.firebaseApp = app;
+    window.db = db;
+    window.firebaseFirestore = { collection, doc, getDoc, setDoc, onSnapshot };
+    
+    // Firebaseの初期化完了を通知
+    window.firebaseReady = true;
+    window.dispatchEvent(new Event('firebaseReady'));
+  </script>
+  
+  <!-- Babel Standalone -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Appコンポーネント -->
+  <script type="text/babel" data-type="module" src="./app.jsx"></script>
+  
+  <!-- 初期化スクリプト -->
+  <script>
+    // Firebaseとapp.jsxの両方が読み込まれるのを待つ
+    function initApp() {
+      if (window.firebaseReady && window.App) {
+        const { createRoot } = ReactDOM;
+        const root = createRoot(document.getElementById('root'));
+        root.render(React.createElement(window.App));
+        console.log('App initialized successfully');
+      } else {
+        console.log('Waiting for Firebase and App...', {
+          firebaseReady: window.firebaseReady,
+          appLoaded: !!window.App
+        });
+        setTimeout(initApp, 100);
+      }
+    }
+    
+    // DOMとFirebaseの準備完了後に初期化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initApp, 500);
+      });
+    } else {
+      setTimeout(initApp, 500);
+    }
+  </script>
+</body>
+</html>
