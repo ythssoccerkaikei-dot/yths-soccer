@@ -3188,4 +3188,4 @@ const App = () => {
   );
 };
 
-export default App;
+window.App = App;
